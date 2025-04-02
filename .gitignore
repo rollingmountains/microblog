@@ -1,2 +1,4 @@
 .flaskenv
 .env
+scrap.html
+.djlintrc
