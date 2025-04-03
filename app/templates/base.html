@@ -11,10 +11,19 @@
     </head>
     <body>
         <div>
-            Microblog: <a href="/index">Home</a>
-            <hr>
+            Microblog: <a href="{{ url_for('index') }}">Home</a> <a href="{{ url_for('login') }}">Login</a>
+        </div>
+        <hr>
+        <div>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
         </div>
         {% block content %}
-        {% endblock s %}
+        {% endblock content %}
     </body>
 </html>

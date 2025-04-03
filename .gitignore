@@ -2,3 +2,4 @@
 .env
 scrap.html
 .djlintrc
+config.py
