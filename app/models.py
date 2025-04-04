@@ -1,6 +1,7 @@
 from typing import Optional
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+from datetime import datetime, timezone
 from app import db
 
 
@@ -12,6 +13,21 @@ class User(db.Model):
         sa.String(120), index=True, unique=True)
     password_hashing: so.Mapped[Optional[str]
                                 ] = so.mapped_column(sa.String(256))
+    posts: so.WriteOnlyMapped['Post'] = so.relationship(
+        back_populates='author')
 
     def __repr__(self):
         return f'Name: {self.username}, Email: {self.email}'
+
+
+class Post(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    body: so.Mapped[int] = so.mapped_column(sa.String(140))
+    timestamp: so.Mapped[datetime] = so.mapped_column(
+        index=True, default=lambda: datetime.now(timezone.utc))
+    user_id: so.Mapped[int] = so.mapped_column(
+        sa.ForeignKey(User.id), index=True)
+    author: so.Mapped['User'] = so.relationship(back_populates='posts')
+
+    def __repr__(self):
+        return f'Author Id: {self.user_id}, Content: {self.body}'
