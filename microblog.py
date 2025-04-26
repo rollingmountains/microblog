@@ -1,10 +1,9 @@
 # run the application hosted as a package in app folder
 from app import app
-
 # push shell context processor
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from app import app, db
+from app import db
 from app.models import User, Post
 
 
