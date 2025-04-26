@@ -7,21 +7,6 @@ from app.models import User
 from app import db
 import sqlalchemy as sa
 
-# mock data
-user = {'username': 'bond'}
-posts = [{
-    'title': 'Experience',
-    'author': 'John Doe',
-    'body': 'Good day in Kathmandu',
-    'date_published': '22, April 2024',
-},
-    {
-    'title': 'Movie time',
-    'author': 'John Doe',
-    'body': 'That was a wonderful movie.',
-    'date_published': '21, April 2024',
-}]
-
 
 @app.route("/")
 @app.route("/index")
