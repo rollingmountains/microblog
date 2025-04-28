@@ -1,11 +1,16 @@
 from app import app
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, session
 from urllib.parse import urlsplit
-from app.forms import LoginForm
-from flask_login import current_user, login_user, logout_user, login_required
+from app.forms import LoginForm, RegistraionForm
+from flask_login import login_user, current_user, logout_user, login_required
 from app.models import User
 from app import db
 import sqlalchemy as sa
+
+# decorator to expire regular session
+# @app.before_request
+# def make_session_permanent():
+#     session.permanent = True
 
 
 @app.route("/")
@@ -14,6 +19,24 @@ import sqlalchemy as sa
 def index():
     # return render_template('index.html', title="Home Page", posts=posts)
     return render_template('index.html', title="Home Page")
+
+
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    form = RegistraionForm()
+
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations! You are now a registered user.')
+        return redirect(url_for('login'))
+
+    return render_template('register.html', title='Register', form=form)
 
 
 @app.route("/login", methods=['GET', 'POST'])
