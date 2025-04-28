@@ -6,13 +6,13 @@
         <p>
             {{ form.username.label }}
             <br>
-            {{ form.username(size=32) }}
+            {{ form.username(placeholder='enter username', size=32) }}
             {% for error in form.username.errors %}<span style="color: red">{{ error }}</span>{% endfor %}
         </p>
         <p>
             {{ form.email.label }}
             <br>
-            {{ form.email(size=64) }}
+            {{ form.email(placeholder='enter email',size=32) }}
             {% for error in form.email.errors %}<span style="color: red">{{ error }}</span>{% endfor %}
         </p>
         <p>
@@ -24,7 +24,7 @@
         <p>
             {{ form.password2.label }}
             <br>
-            {{ form.password2(placeholder='enter password', size=32) }}
+            {{ form.password2(placeholder='repeat password', size=32) }}
             {% for error in form.password2.errors %}<span style="color: red">{{ error }}</span>{% endfor %}
         </p>
         <p>{{ form.submit() }}</p>

@@ -4,3 +4,6 @@ scrap.html
 .djlintrc
 config.py
 app.db
+*.log
+*.log.*
+logs/
