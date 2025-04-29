@@ -12,6 +12,7 @@ flask-sqlalchemy = "*"
 flask-migrate = "*"
 flask-login = "*"
 email-validator = "*"
+aiosmtpd = "*"
 
 [dev-packages]
 
