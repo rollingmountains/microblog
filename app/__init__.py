@@ -52,11 +52,6 @@ if not app.debug:
             app.logger.handlers = []
             app.logger.addHandler(mail_handler)
             app.logger.setLevel(logging.ERROR)
-    print("SMTP Handler configured:")
-    print(f"Server: {app.config['MAIL_SERVER']}:{app.config['MAIL_PORT']}")
-    print(f"TLS: {app.config['MAIL_USE_TLS']}")
-    print(f"Recipients: {app.config['ADMINS']}")
-    print(f"Current handlers: {app.logger.handlers}")
 
     # log the errors
     if not os.path.exists('logs'):
@@ -72,7 +67,6 @@ if not app.debug:
 
 
 # registering the routes in function to stop imports to move to top upon save
-
 
 def register_routes():
     from app import routes, models, errors
