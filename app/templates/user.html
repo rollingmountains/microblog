@@ -8,6 +8,7 @@
             <td>
                 <h1>User: {{ user.username }}</h1>
                 {% if user.about_me %}<p>About me: {{ user.about_me }}</p>{% endif %}
+                {# # display last seen #}
                 {% if user.last_seen %}
                     <p>
                         Last seen on:
@@ -33,9 +34,27 @@
                     timeElement.textContent = date.toLocaleString(undefined, options);
                     </script>
                 {% endif %}
+                {# display edit profile link #}
                 {% if user == current_user %}
                     <p>
                         <a href="{{ url_for('edit_profile') }}">Edit your profile</a>
+                    </p>
+                    {# # display the follow and unfollow button #}
+                {% elif not current_user.is_following(user) %}
+                    <p>
+                        <form action="{{ url_for('follow', username=user.username) }}"
+                              method="post">
+                            {{ form.hidden_tag() }}
+                            {{ form.submit(value ='Follow') }}
+                        </form>
+                    </p>
+                {% else %}
+                    <p>
+                        <form action="{{ url_for('unfollow', username=user.username) }}"
+                              method="post">
+                            {{ form.hidden_tag() }}
+                            {{ form.submit(value ='Unfollow') }}
+                        </form>
                     </p>
                 {% endif %}
             </td>

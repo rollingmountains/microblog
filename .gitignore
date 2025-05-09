@@ -7,3 +7,11 @@ app.db
 *.log
 *.log.*
 logs/
+scrap.py
+migrations_mini/
+scrap.db
+__pycache__/
+*.py[cod]
+.venv/
+scrap1.py
+tests.py

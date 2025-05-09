@@ -10,14 +10,28 @@
         {% endif %}
     </head>
     <body>
-        <div>
-            Microblog: <a href="{{ url_for('index') }}">Home</a>
-            {% if current_user.is_anonymous %}
-                <a href="{{ url_for('login') }}">Login</a>
-            {% else %}
-                <a href="{{ url_for('user', username=current_user.username) }}">Profile</a>
+        <div style="display: flex;
+                    justify-content: space-between;
+                    align-items: center">
+            <!-- Left-aligned navigation -->
+            <div>
+                Microblog: <a href="{{ url_for('index') }}">Home</a>
+                {% if current_user.is_anonymous %}
+                    <a href="{{ url_for('login') }}">Login</a>
+                {% else %}
+                    <a href="{{ url_for('user', username=current_user.username) }}">Profile</a>
+                {% endif %}
+                {% if current_user.username %}<a href="{{ url_for('logout') }}">Logout</a>{% endif %}
+            </div>
+            <!-- Right-aligned debug info -->
+            {% if config.DEBUG %}
+                <div>
+                    <a href="https://www.sqlite.org/"
+                       style="background: rgba(0,0,0,0.1);
+                              padding: 2px 5px;
+                              border-radius: 3px">Source: {{ config.SQLALCHEMY_DATABASE_URI.split("/")[-1] }}</a>
+                </div>
             {% endif %}
-            <a href="{{ url_for('logout') }}">Logout</a>
         </div>
         <hr>
         <div>
