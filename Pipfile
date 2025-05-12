@@ -13,6 +13,8 @@ flask-migrate = "*"
 flask-login = "*"
 email-validator = "*"
 aiosmtpd = "*"
+flask-mail = "*"
+pyjwt = "*"
 
 [dev-packages]
 
