@@ -56,3 +56,20 @@ class EditProfileForm(FlaskForm):
 
 class EmptyForm(FlaskForm):
     submit = SubmitField('Submit')
+
+
+class PostForm(FlaskForm):
+    post = TextAreaField("What's in your mind?", validators=[
+                         DataRequired(), Length(min=1, max=140)])
+    submit = SubmitField('Submit')
+
+
+class ResetPasswordRequestForm(FlaskForm):
+    email = StringField('Enter Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+
+class ResetPasswordForm(FlaskForm):
+    password = StringField('Password', validators=[DataRequired()])
+    password2 = StringField('Repeat Password', validators=[DataRequired()])
+    submit = SubmitField('Submit')

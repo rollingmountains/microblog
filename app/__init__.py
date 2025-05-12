@@ -8,6 +8,7 @@ from flask_login import LoginManager
 import logging
 from logging.handlers import RotatingFileHandler, SMTPHandler
 import os
+from flask_mail import Mail
 
 # set the instance of the app
 app = Flask(__name__)
@@ -25,11 +26,14 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+# instance of flask mail
+mail = Mail(app)
+
 # login manager instance
 login = LoginManager(app)
 login.login_view = 'login'
 
-# log errors in a file
+# log errors via email and in file
 if not app.debug:
     # send error emails
     if app.config['MAIL_SERVER']:
@@ -68,8 +72,8 @@ if not app.debug:
 
 # registering the routes in function to stop imports to move to top upon save
 
-def register_routes():
-    from app import routes, models, errors
+def register():
+    from app import routes, models, errors, mail
 
 
-register_routes()
+register()
