@@ -236,9 +236,14 @@ def reset_password(token):
     form = ResetPasswordForm()
 
     if form.validate_on_submit():
-        user.set_password(form.password.data)
-        db.session.commit()
-        flash('You have successfully reset your password.')
-        return redirect(url_for('login'))
+        if user.verify_reset_password(form.password.data):
+            user.set_password(form.password.data)
+            db.session.commit()
+            flash('You have successfully reset your password.')
+            return redirect(url_for('login'))
+        else:
+            flash(
+                'Sorry, new password cannot be same as last 3 passwords. Enter another one')
+            return redirect(url_for('reset_password', token=token))
 
     return render_template('reset_password.html', form=form)

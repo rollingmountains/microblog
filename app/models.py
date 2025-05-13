@@ -1,5 +1,6 @@
-from typing import Optional
+from typing import Optional, List
 import sqlalchemy as sa
+from sqlalchemy.ext.mutable import MutableList
 import sqlalchemy.orm as so
 from datetime import datetime, timezone
 from app import db, login, app
@@ -27,6 +28,8 @@ class User(UserMixin, db.Model):
         sa.String(120), index=True, unique=True)
     password_hash: so.Mapped[Optional[str]
                              ] = so.mapped_column(sa.String(256))
+    previous_passwords: so.Mapped[Optional[List[str]]
+                                  ] = so.mapped_column(MutableList.as_mutable(sa.JSON), default=list, index=True, nullable=True)
     about_me: so.Mapped[Optional[str]] = so.mapped_column(sa.String(140))
     last_seen: so.Mapped[Optional[datetime]] = so.mapped_column(
         default=lambda: datetime.now(timezone.utc))
@@ -54,11 +57,45 @@ class User(UserMixin, db.Model):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return f'https://www.gravatar.com/avatar/{digest}/?d=identicon&s={size}'
 
+    def prune_previous_passwords_list(self):
+        max_limit = int(app.config['PASSWORD_HISTORY_SIZE'])
+        if len(self.previous_passwords) > max_limit:
+            self.previous_passwords = self.previous_passwords[-max_limit:]
+            db.session.commit()
+
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+        new_hash = generate_password_hash(password)
+
+        # create empty list if the password list is None
+        if self.previous_passwords is None:
+            self.previous_passwords = []
+
+        # add current password to the password list
+        if self.password_hash:
+            self.previous_passwords.append(self.password_hash)
+
+        # set new password
+        self.password_hash = new_hash
+
+        # prune the list
+        self.prune_previous_passwords_list()
+        db.session.commit()
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def verify_reset_password(self, password):
+        max_limit = int(app.config['PASSWORD_HISTORY_SIZE'])
+
+        # check the current password
+        if check_password_hash(self.password_hash, password):
+            return False
+
+        # check the password from the list
+        for item in (self.previous_passwords or [])[-(max_limit - 1):]:
+            if check_password_hash(item, password):
+                return False
+        return True
 
     def follow(self, user):
         if not self.is_following(user):
