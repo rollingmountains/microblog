@@ -10,11 +10,12 @@
                 {% if user.about_me %}<p>About me: {{ user.about_me }}</p>{% endif %}
                 {# # display last seen #}
                 {% if user.last_seen %}
-                    <p>
+                    <p>Last Seen: {{ moment(user.last_seen).format('LLL') }}</p>
+                    {# <p>
                         Last seen on:
                         <span id="last-seen-time" data-utc="{{ user.last_seen.isoformat() }}">Loading...</span>
-                    </p>
-                    <script>
+                    </p> #}
+                    {# <script>
                         const timeElement = document.getElementById('last-seen-time');
                         const utcString = timeElement.dataset.utc;
     
@@ -32,7 +33,7 @@
                     };
     
                     timeElement.textContent = date.toLocaleString(undefined, options);
-                    </script>
+                    </script> #}
                 {% endif %}
                 {# display edit profile link #}
                 {% if user == current_user %}

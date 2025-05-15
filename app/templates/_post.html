@@ -4,7 +4,7 @@
             <img src={{ post.author.avatar(36) }}>
         </td>
         <td>
-            <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a> says:
+            <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a> said {{ moment(post.timestamp).fromNow() }}:
             <br>
             {{ post.body }}
         </td>

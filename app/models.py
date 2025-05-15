@@ -61,7 +61,6 @@ class User(UserMixin, db.Model):
         max_limit = int(app.config['PASSWORD_HISTORY_SIZE'])
         if len(self.previous_passwords) > max_limit:
             self.previous_passwords = self.previous_passwords[-max_limit:]
-            db.session.commit()
 
     def set_password(self, password):
         new_hash = generate_password_hash(password)
@@ -79,7 +78,6 @@ class User(UserMixin, db.Model):
 
         # prune the list
         self.prune_previous_passwords_list()
-        db.session.commit()
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)

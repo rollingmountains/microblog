@@ -1,5 +1,5 @@
 # Application is hosted as a package
-from flask import Flask
+from flask import Flask, request
 from config import Config  # import Config class from config file
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
@@ -9,6 +9,8 @@ import logging
 from logging.handlers import RotatingFileHandler, SMTPHandler
 import os
 from flask_mail import Mail
+from flask_moment import Moment
+from flask_babel import Babel
 
 # set the instance of the app
 app = Flask(__name__)
@@ -32,6 +34,20 @@ mail = Mail(app)
 # login manager instance
 login = LoginManager(app)
 login.login_view = 'login'
+login.login_message = "This page is login protected. Please login to access this page"
+
+# flask moment instance
+moment = Moment(app)
+
+# flask babel instance
+
+
+def get_locale():
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+
+babel = Babel(app, locale_selector=get_locale)
+
 
 # log errors via email and in file
 if not app.debug:
