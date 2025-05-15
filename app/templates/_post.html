@@ -5,6 +5,7 @@
         </td>
         <td>
             <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a> said {{ moment(post.timestamp).fromNow() }}:
+            {% if post.language != 'en' %}<a href="#">translate - {{ post.language }}</a>{% endif %}
             <br>
             {{ post.body }}
         </td>

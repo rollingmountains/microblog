@@ -18,6 +18,7 @@ pyjwt = "*"
 flask-moment = "*"
 flask-babel = "*"
 langdetect = "*"
+faker = "*"
 
 [dev-packages]
 

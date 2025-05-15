@@ -6,6 +6,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from app.models import User, Post
 import sqlalchemy as sa
 from datetime import datetime, timezone
+from langdetect import detect, LangDetectException
 
 
 @app.before_request
@@ -23,7 +24,12 @@ def index():
     form = PostForm()
 
     if form.validate_on_submit():
-        post = Post(body=form.post.data, author=current_user)
+        try:
+            language = detect(form.post.data)
+        except LangDetectException:
+            language = ''
+        post = Post(body=form.post.data,
+                    author=current_user, language=language)
         db.session.add(post)
         db.session.commit()
         flash(f'You have successfully posted a message')
